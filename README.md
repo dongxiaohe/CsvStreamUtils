@@ -1,6 +1,6 @@
 CsvStreamUtils
 ==============
-CsvStreamUtils is a CSV tookit written in Scala to provide a functional way to handle CSV file or stream. It can be imported in Java or Scala. In order to get ride of boilerplate to parse CSV file in a imperative way, it allows users to use more composable way to handle CSV parsing. 
+CsvStreamUtils is a CSV tookit written in Scala to provide a functional way to handle CSV file or stream. It can be imported in Java or Scala. In order to get rid of boilerplate to parse CSV file in a imperative way, it allows users to use more composable way to handle CSV parsing. 
 
 There are several features can be used for the CSV parsing
 
