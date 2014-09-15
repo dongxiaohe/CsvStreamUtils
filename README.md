@@ -8,7 +8,7 @@ There are several features can be used for the CSV parsing
 + Error handling
 + Modularity
 
-### Why need change and the issue: The imperative way of handling CSV IO
+### The issue: The imperative way of handling CSV IO
 ``` Java
 List<ViewObject> voList = Lists.newArrayList();
 try (CSVReader csvReader = csvFactory.createReader(csv)) {
