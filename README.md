@@ -49,7 +49,7 @@ if (result.isSuccessful()) {
 }
 ```
 + User::new is java 8 lamda, so it basically tell CsvStreamUtils how to construct User object from an array of String.
-+ For java 7, it can use a ```Function<String[], User>``` from guawa to transform a String[] to User
++ For java 7, it can use a ```Function<String[], User>``` from <b> guawa </b> to transform a String[] to User
 
 
 #### 2. Error handling
@@ -60,14 +60,11 @@ assertThat(result.isFailed(), is(true));
 List<LineErrorConverter> failureResult = result.getFailureResult();
 assertThat(failureResult.size(), is(1));
 List<SimplifiedErrorContainer> errorContainer = failureResult.get(0).getViolations()
-
-//SimplifiedErrorContainer has 3 fields to specify the column error
+```
+<b>SimplifiedErrorContainer</b> has <b> 3 fields </b> to specify the column error
 + lineNumber: Int
 + columnName: String
 + errorMessage: String 
-
-
-```
 
 #### 3. Using default error message
 ``` Java
@@ -75,9 +72,9 @@ The CSV file
 
 username,company,interest,team
 Cloud,AusRegistry,Swimming,dev
-James,AusRegistry,, // error line
-Andres,AusRegistry,,dev //error line
-Andrew,AusRegistry,Table tennis, //error line
+James,AusRegistry,,                  // error line
+Andres,AusRegistry,,dev              //error line
+Andrew,AusRegistry,Table tennis,     //error line
 Jason,AusRegistry,Noisy,dev
 Varol,AusRegistry,Table tennis,dev
 
@@ -115,12 +112,12 @@ System.out.println(formattedErrorMessage)
 
 #### 4. Composable operation for the line
 
-+ If we want to ignore first 3 rows, because there may be some comment, header or whatever.
++ If we want to ignore first <b> 3 </b> rows, because there may be some comment, header or whatever.
 ``` Java
 StreamOperationBuilder<User> builder = new StreamOperationBuilder<>();
 Result<User> result = service.parse(file, User::new, builder.drop(3));
 ```
-+ If we want to only get the <b> third </b> line, we can use andThen to compose it
++ If we want to only get the <b> third </b> line, we can use <b> andThen </b> to compose it
 ``` Java
 StreamOperationBuilder<User> builder = new StreamOperationBuilder<>();
 Result<User> result = service.parse(file,
@@ -135,7 +132,7 @@ Result<User> result = service.parse(file,
  builder.drop(3).andThen(builder.takeWhile(t -> !"James".equals(t.getName))));
 ```
 
-#### 5. Errors handling
+#### 5. Errors customization interface
 
 + Error line can be limited. Only return maximum 5 lines of error intead of return everything
 ``` Java
