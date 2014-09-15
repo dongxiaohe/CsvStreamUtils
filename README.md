@@ -134,10 +134,10 @@ Result<User> result = service.parse(file,
 
 #### 5. Errors customization interface
 
-+ Error line can be limited. Only return maximum 5 lines of error intead of return everything
++ Error lines can be limited
 ``` Java
 File file = new File("src/test/resources/users_invalid_100_rows.csv");
-Result<User> result = service.parse(file, User::new, 5);
+Result<User> result = service.parse(file, User::new, 5); // Only return maximum 5 lines of error
 List<LineErrorConverter> failureResult = result.getFailureResult();
 assertThat(failureResult.size(), is(5)); //only return 5 lines error
 
