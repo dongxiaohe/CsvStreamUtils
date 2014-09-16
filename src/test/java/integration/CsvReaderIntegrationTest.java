@@ -1,12 +1,12 @@
 package integration;
 
-import appJava.CsvService;
-import builder.StreamOperationBuilder;
+import com.xiaohedong.csv.appJava.CsvService;
+import com.xiaohedong.csv.builder.StreamOperationBuilder;
 import org.junit.Before;
 import org.junit.Test;
-import validation.LineErrorConverter;
-import vo.Result;
-import vo.SimplifiedErrorContainer;
+import com.xiaohedong.csv.validation.LineErrorConverter;
+import com.xiaohedong.csv.vo.Result;
+import com.xiaohedong.csv.vo.SimplifiedErrorContainer;
 
 import java.io.File;
 import java.io.FileReader;
