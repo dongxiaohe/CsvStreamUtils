@@ -1,8 +1,8 @@
 package integration;
 
 import com.google.common.collect.Lists;
-import com.xiaohedong.csv.mapper.Mapper;
-import com.xiaohedong.csv.format.SortedColumn;
+import com.github.dannywe.csv.mapper.Mapper;
+import com.github.dannywe.csv.format.SortedColumn;
 
 import java.util.List;
 

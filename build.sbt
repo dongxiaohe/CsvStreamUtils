@@ -2,7 +2,7 @@ name := "CsvStreamUtils"
 
 version := "1.0"
 
-organization := "com.xiaohedong"
+organization := "com.github.dannywe"
 
 scalaVersion := "2.10.3"
 

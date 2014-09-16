@@ -1,8 +1,8 @@
 package integration;
 
-import com.xiaohedong.csv.base.writer.Iterator;
-import com.xiaohedong.csv.base.writer.Next;
-import com.xiaohedong.csv.base.writer.Stop;
+import com.github.dannywe.csv.base.writer.Iterator;
+import com.github.dannywe.csv.base.writer.Next;
+import com.github.dannywe.csv.base.writer.Stop;
 
 import java.io.BufferedReader;
 import java.io.IOException;

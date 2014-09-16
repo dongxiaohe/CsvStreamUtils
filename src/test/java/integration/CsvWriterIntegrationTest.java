@@ -1,6 +1,6 @@
 package integration;
 
-import com.xiaohedong.csv.app.CsvWriterService;
+import com.github.dannywe.csv.app.CsvWriterService;
 import org.junit.Before;
 import org.junit.Test;
 

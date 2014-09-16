@@ -1,12 +1,12 @@
 package integration;
 
-import com.xiaohedong.csv.appJava.CsvService;
-import com.xiaohedong.csv.builder.StreamOperationBuilder;
+import com.github.dannywe.csv.appJava.CsvService;
+import com.github.dannywe.csv.builder.StreamOperationBuilder;
 import org.junit.Before;
 import org.junit.Test;
-import com.xiaohedong.csv.validation.LineErrorConverter;
-import com.xiaohedong.csv.vo.Result;
-import com.xiaohedong.csv.vo.SimplifiedErrorContainer;
+import com.github.dannywe.csv.validation.LineErrorConverter;
+import com.github.dannywe.csv.vo.Result;
+import com.github.dannywe.csv.vo.SimplifiedErrorContainer;
 
 import java.io.File;
 import java.io.FileReader;
