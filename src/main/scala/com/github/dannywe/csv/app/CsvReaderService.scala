@@ -7,7 +7,6 @@ import com.github.dannywe.csv.base._
 import com.github.dannywe.csv.validation.JavaxValidator
 import scalaz.stream.Process
 import scalaz.concurrent.Task
-import com.github.dannywe.csv.csv.CsvReaderAdaptor
 import scala.util.Try
 
 class CsvReaderService extends ReaderService with StreamTransformer {

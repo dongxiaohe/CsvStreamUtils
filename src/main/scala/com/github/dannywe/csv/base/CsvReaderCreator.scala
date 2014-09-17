@@ -1,4 +1,4 @@
-package com.github.dannywe.csv.csv
+package com.github.dannywe.csv.base
 
 import java.io.{File, FileReader, Reader}
 
