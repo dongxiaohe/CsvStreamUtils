@@ -9,9 +9,10 @@ import scala.util.Try
 trait StreamTransformer {
 
   def transformT[T](reader: ReaderLike, f: StringArray => T): Process[Task, (Try[T], Int)] = {
-    def mapToT: StringArray => Task[Try[T]] = t => Task(Try{f(t)})
+    val mapToT: StringArray => Task[Try[T]] = t => Task(Try{f(t)})
 
-    val result: Process[Task, StringArray] = Process.emitAll(reader.readAll())
+    val result: Process[Task, StringArray] = Process
+      .repeatEval(Task{reader.readLine()}).takeWhile(t => !t.shouldStop).map(t => t.get)
 
     val channel = Process.constant(mapToT)
 

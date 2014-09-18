@@ -258,7 +258,7 @@ public class CsvReaderIntegrationTest {
         Result<User> result = service.parse(file,
                 User::new,
                 builder.drop(1).andThen(builder.take(1)),
-                3);
+                100);
 
         assertThat(result.isSuccessful(), is(true));
 

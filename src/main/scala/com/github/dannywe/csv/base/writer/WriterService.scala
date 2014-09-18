@@ -1,6 +1,7 @@
 package com.github.dannywe.csv.base.writer
 
 import au.com.bytecode.opencsv.CSVWriter
+import com.github.dannywe.csv.base.Next
 import com.github.dannywe.csv.core.TypeAliases._
 
 import scalaz.concurrent.Task

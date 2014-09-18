@@ -12,7 +12,13 @@ class CsvReaderAdaptor(csvReader: CSVReader) extends ReaderLike {
 
   override def close(): Unit = csvReader.close()
 
-  override def readAll(): Seq[StringArray] = csvReader.readAll()
+  override def readLine(): Next[StringArray] = {
+    val next = csvReader.readNext()
+    next match {
+      case x: StringArray => println(x.toList); Cont(next)
+      case _ => Stop[StringArray]()
+    }
+  }
 
 }
 

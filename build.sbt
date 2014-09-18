@@ -23,6 +23,24 @@ publishTo := {
   Some("releases"  at "https://oss.sonatype.org/service/local/staging/deploy/maven2")
 }
 
+pomExtra :=
+    <licenses>
+      <license>
+        <name>BSD-style</name>
+        <url>http://opensource.org/licenses/Apache-2.0</url>
+        <distribution>repo</distribution>
+      </license>
+    </licenses>
+    <scm>
+      <url>git@github.com/DannyWE/CsvStreamUtils.git</url>
+      <connection>scm:git:git@github.com/DannyWE/CsvStreamUtils.git</connection>
+    </scm>
+    <developers>
+      <developer>
+        <id>danny.dong</id>
+        <name>Xiaohe Dong</name>
+      </developer>
+    </developers>
 
 credentials += Credentials(new File("C://repo//sona.txt"))
 

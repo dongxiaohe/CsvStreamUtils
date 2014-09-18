@@ -62,28 +62,32 @@ trait ReaderService {
   def parse[T](file: File, f: StringArray => T, buffer: Int): Result[T] = {
     val readerLike: ReaderLike = readerCreationModule.getReader(file)
     val operatedProcess: Process[Task, (Try[T], Int)] = processModule.transform(readerLike, f)
+    val eitherResult = processModule.validate(operatedProcess, buffer)
     readerLike.close()
-    Result(processModule.validate(operatedProcess, buffer))
+    Result(eitherResult)
   }
 
   def parse[T](reader: Reader, f: StringArray => T, buffer: Int = 1): Result[T] = {
     val readerLike: ReaderLike = readerCreationModule.getReader(reader)
     val operatedProcess: Process[Task, (Try[T], Int)] = processModule.transform(readerLike, f)
+    val eitherResult = processModule.validate(operatedProcess, buffer)
     readerLike.close()
-    Result(processModule.validate(operatedProcess, buffer))
+    Result(eitherResult)
   }
 
   def parse[T](file: File, f: StringArray => T, ops: ProcessF[T], buffer: Int): Result[T] = {
     val readerLike: ReaderLike = readerCreationModule.getReader(file)
     val operatedProcess: Process[Task, (Try[T], Int)] = ops(processModule.transform(readerLike, f))
+    val eitherResult = processModule.validate(operatedProcess, buffer)
     readerLike.close()
-    Result(processModule.validate(operatedProcess, buffer))
+    Result(eitherResult)
   }
 
   def parse[T](reader: Reader, f: StringArray => T, ops: ProcessF[T], buffer: Int = 1): Result[T] = {
     val readerLike: ReaderLike = readerCreationModule.getReader(reader)
     val operatedProcess: Process[Task, (Try[T], Int)] = ops(processModule.transform(readerLike, f))
+    val eitherResult = processModule.validate(operatedProcess, buffer)
     readerLike.close()
-    Result(processModule.validate(operatedProcess, buffer))
+    Result(eitherResult)
   }
 }
