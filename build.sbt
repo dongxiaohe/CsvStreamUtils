@@ -20,9 +20,11 @@ publishTo := {
 //  if (isSnapshot.value)
 //    Some("snapshots" at nexus + "content/repositories/snapshots")
 //  else
-    Some("snapshots"  at nexus + "content/repositories/snapshots")
+  Some("releases"  at "https://oss.sonatype.org/service/local/staging/deploy/maven2")
 }
 
+
+credentials += Credentials(new File("C://repo//sona.txt"))
 
 libraryDependencies ++= Seq(
   "net.sf.opencsv" % "opencsv" % "2.0",
