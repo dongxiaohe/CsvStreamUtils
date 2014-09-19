@@ -15,7 +15,7 @@ class CsvReaderAdaptor(csvReader: CSVReader) extends ReaderLike {
   override def readLine(): Next[StringArray] = {
     val next = csvReader.readNext()
     next match {
-      case x: StringArray => println(x.toList); Cont(next)
+      case x: StringArray => Cont(next)
       case _ => Stop[StringArray]()
     }
   }
