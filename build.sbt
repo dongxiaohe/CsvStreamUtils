@@ -4,7 +4,7 @@ version := "1.0"
 
 organization := "com.github.dannywe"
 
-scalaVersion := "2.10.3"
+scalaVersion := "2.11.2"
 
 pgpReadOnly := false
 
@@ -26,7 +26,7 @@ publishTo := {
 
 libraryDependencies ++= Seq(
   "net.sf.opencsv" % "opencsv" % "2.0",
-  "org.scalaz" % "scalaz-core_2.10" % "7.1.0-M5",
+  "org.scalaz" % "scalaz-core_2.11" % "7.1.0",
   "javax.validation" % "validation-api" % "1.0.0.GA",
   "org.hibernate" % "hibernate-validator" % "4.2.0.Final",
   "org.scalaz.stream" %% "scalaz-stream" % "0.5a",

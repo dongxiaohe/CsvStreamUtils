@@ -66,7 +66,7 @@ trait ReaderService {
     Result(processModule.validate(operatedProcess, buffer))
   }
 
-  def parse[T](reader: Reader, f: StringArray => T, buffer: Int = 1): Result[T] = {
+  def parse[T](reader: Reader, f: StringArray => T, buffer: Int): Result[T] = {
     val readerLike: ReaderLike = readerCreationModule.getReader(reader)
     val operatedProcess: Process[Task, (Try[T], Int)] = processModule.transform(readerLike, f)
     readerLike.close()
@@ -80,7 +80,7 @@ trait ReaderService {
     Result(processModule.validate(operatedProcess, buffer))
   }
 
-  def parse[T](reader: Reader, f: StringArray => T, ops: ProcessF[T], buffer: Int = 1): Result[T] = {
+  def parse[T](reader: Reader, f: StringArray => T, ops: ProcessF[T], buffer: Int): Result[T] = {
     val readerLike: ReaderLike = readerCreationModule.getReader(reader)
     val operatedProcess: Process[Task, (Try[T], Int)] = ops(processModule.transform(readerLike, f))
     readerLike.close()
