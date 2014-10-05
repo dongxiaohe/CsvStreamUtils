@@ -14,6 +14,7 @@ class StreamValidator(validator: Validator) {
         MissingColumnViolation(line._2)
       case Success(t) =>
         ColumnConstraintViolation[T](line._2, validator.validate(t).toSet)
+      case _ => throw new Exception("unhandled failure found")
     }
   }
 }

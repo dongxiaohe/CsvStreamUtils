@@ -28,3 +28,4 @@ classes/
 jmeter.log
 *~
 src/main/scala/notused
+*.sc

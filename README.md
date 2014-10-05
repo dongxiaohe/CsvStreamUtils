@@ -2,6 +2,15 @@ CsvStreamUtils
 ==============
 CsvStreamUtils is a CSV tookit written in Scala to provide a functional way to handle CSV file or stream. It can be imported in Java or Scala. In order to get rid of the boilerplate to parse CSV file in a imperative way, it allows users to use more composable way to handle CSV parsing. 
 
+### Using CsvStreamUtils (You can use it in Java as well)
+``` Java
+resolvers += "Sonatype OSS Releases" at "https://oss.sonatype.org/content/repositories/releases"
+
+libraryDependencies ++= Seq(
+  "com.github.dannywe" % "csvstreamutils_2.10" % "1.03"
+)
+```
+
 There are several features can be used for the CSV parsing
 
 + Composable way to handle CSV line by line

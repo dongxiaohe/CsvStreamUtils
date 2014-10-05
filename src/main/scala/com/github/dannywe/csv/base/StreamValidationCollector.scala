@@ -2,6 +2,8 @@ package com.github.dannywe.csv.base
 
 import com.github.dannywe.csv.validation.LineConstraintViolation
 
+import scala.annotation.tailrec
+import scala.collection.mutable.ListBuffer
 import scalaz.stream.Process
 import scalaz.concurrent.Task
 import com.github.dannywe.csv.core.TypeAliases._
@@ -25,20 +27,33 @@ class StreamValidationCollector(validator: StreamValidator) {
 
   def validate[T](process: Process[Task, (Try[T], Int)], buffer: Int = 1): EitherResult[T] = {
 
-    val errorRows: Process[Task, LineConstraintViolation] = process
-      .map(validator.validate)
-      .filter(_.hasError)
-      .take(buffer)
+    val accumulator = new ListBuffer[LineConstraintViolation]
+    val taskProcess = process.map(t => {
+      val validationResult = validator.validate(t)
+      if (validationResult.hasError) {
+        accumulator += validationResult
+      }
+      t
+    }).takeWhile(_ => !(accumulator.size == buffer))
 
-    val validate: Seq[LineConstraintViolation] = errorRows.runLog.run
+    val voSeq = taskProcess.runLog.run
 
-    if(validate.nonEmpty) {
-      Right(validate)
-    }
-    else {
-      val voSeq = process.runLog.run
-      Left(voSeq.map(_._1.get))
-    }
+    if (accumulator.isEmpty) Left(voSeq.map(_._1.get))
+    else Right(accumulator)
+
+//    val result = process.scan(Seq[T]() -> Seq[LineConstraintViolation]()) { (r, e) =>
+//      val (s, f) = r
+//      val validationResult = validator.validate(e)
+//      if (validationResult.hasError) s -> (f :+ validationResult)
+//      else (s :+ e._1.get) -> f
+//    }.takeWhile()
+//      .dropWhile{case (succ, fail) => fail.size < buffer}
+//      .take(1)
+//
+//    val run = result.runLast.run.get
+//    if (run._2.isEmpty) Left(run._1)
+//    else Right(run._2)
+
   }
 
 }

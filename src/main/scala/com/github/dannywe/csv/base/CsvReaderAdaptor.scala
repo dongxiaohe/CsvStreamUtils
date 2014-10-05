@@ -1,16 +1,24 @@
-package com.github.dannywe.csv.csv
+package com.github.dannywe.csv.base
 
+import java.io.{File, Reader}
+
+import au.com.bytecode.opencsv.CSVReader
 import com.github.dannywe.csv.base.reader.ReaderLike
 import com.github.dannywe.csv.core.TypeAliases._
-import au.com.bytecode.opencsv.CSVReader
+
 import scala.collection.JavaConversions._
-import java.io.{Reader, File}
 
 class CsvReaderAdaptor(csvReader: CSVReader) extends ReaderLike {
 
   override def close(): Unit = csvReader.close()
 
-  override def readAll(): Seq[StringArray] = csvReader.readAll()
+  override def readLine(): Next[StringArray] = {
+    val next = csvReader.readNext()
+    next match {
+      case x: StringArray => Cont(next)
+      case _ => Stop[StringArray]()
+    }
+  }
 
 }
 

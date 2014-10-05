@@ -7,7 +7,6 @@ import com.github.dannywe.csv.base._
 import com.github.dannywe.csv.validation.JavaxValidator
 import scalaz.stream.Process
 import scalaz.concurrent.Task
-import com.github.dannywe.csv.csv.CsvReaderAdaptor
 import scala.util.Try
 
 class CsvReaderService extends ReaderService with StreamTransformer {
@@ -17,7 +16,10 @@ class CsvReaderService extends ReaderService with StreamTransformer {
   class ProcessModule extends ProcessModuleLike {
     override def validateAll[T](process: Process[Task, (Try[T], Int)]): EitherResult[T] = validationCollector.validateAll(process)
     override def transform[T](reader: ReaderLike, f: (StringArray) => T): Process[Task, (Try[T], Int)] = transformT(reader, f)
-    override def validate[T](process: Process[Task, (Try[T], Int)], buffer: Int): EitherResult[T] = validationCollector.validate(process, buffer)
+    override def validate[T](process: Process[Task, (Try[T], Int)], buffer: Int): EitherResult[T] = {
+      require(buffer > 0, "the validation buffer should be more than 0")
+      validationCollector.validate(process, buffer)
+    }
   }
 
   class ReaderCreationModule extends ReaderCreationModuleLike {

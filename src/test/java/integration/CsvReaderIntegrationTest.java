@@ -3,10 +3,12 @@ package integration;
 import com.github.dannywe.csv.appJava.CsvService;
 import com.github.dannywe.csv.builder.StreamOperationBuilder;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import com.github.dannywe.csv.validation.LineErrorConverter;
 import com.github.dannywe.csv.vo.Result;
 import com.github.dannywe.csv.vo.SimplifiedErrorContainer;
+import org.junit.rules.ExpectedException;
 
 import java.io.File;
 import java.io.FileReader;
@@ -19,6 +21,9 @@ import static org.junit.Assert.assertThat;
 import static org.junit.internal.matchers.StringContains.containsString;
 
 public class CsvReaderIntegrationTest {
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     private CsvService service;
 
@@ -246,7 +251,14 @@ public class CsvReaderIntegrationTest {
         Result<User> overflowResult = service.parse(file, User::new, 4);
 
         assertThat(overflowResult.getFailureResult().size(), is(3));
+    }
+    
+    @Test
+    public void shouldFailIfBufferIsLessThan0() {
+        File file = new File("src/test/resources/users_invalid_3_rows.csv");
 
+        thrown.expect(Exception.class);
+        service.parse(file, User::new, 0);
     }
 
     @Test
@@ -258,7 +270,7 @@ public class CsvReaderIntegrationTest {
         Result<User> result = service.parse(file,
                 User::new,
                 builder.drop(1).andThen(builder.take(1)),
-                3);
+                100);
 
         assertThat(result.isSuccessful(), is(true));
 

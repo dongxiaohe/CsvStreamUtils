@@ -1,8 +1,9 @@
 package integration;
 
+import com.github.dannywe.csv.base.Cont;
+import com.github.dannywe.csv.base.Next;
+import com.github.dannywe.csv.base.Stop;
 import com.github.dannywe.csv.base.writer.Iterator;
-import com.github.dannywe.csv.base.writer.Next;
-import com.github.dannywe.csv.base.writer.Stop;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,8 +27,8 @@ public class FileIteratorAdaptor implements Iterator<User> {
     public Next<User> next() throws IOException {
         String s = bufferedReader.readLine();
         System.out.println(s);
-        if (s == null) return new Stop();
-        return new Next<>(new User(s.split(",")));
+        if (s == null) return new Stop<>();
+        return new Cont<>(new User(s.split(",")));
 
 //        String s = bufferedReader.readLine();
 //        System.out.println(s);
