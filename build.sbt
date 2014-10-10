@@ -1,6 +1,6 @@
 name := "CsvStreamUtils"
 
-version := "1.03"
+version := "1.04"
 
 organization := "com.github.dannywe"
 
