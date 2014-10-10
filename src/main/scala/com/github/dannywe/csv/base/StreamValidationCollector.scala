@@ -1,16 +1,12 @@
 package com.github.dannywe.csv.base
 
+import com.github.dannywe.csv.core.TypeAliases._
 import com.github.dannywe.csv.validation.LineConstraintViolation
 
-import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
-import scalaz.stream.Process
+import scala.util.Try
 import scalaz.concurrent.Task
-import com.github.dannywe.csv.core.TypeAliases._
-import javax.validation.ConstraintViolation
-import javax.validation.{ConstraintViolation, Validation, Validator}
-import scala.collection.JavaConversions._
-import scala.util.{Failure, Try}
+import scalaz.stream.Process
 
 
 class StreamValidationCollector(validator: StreamValidator) {
@@ -40,19 +36,6 @@ class StreamValidationCollector(validator: StreamValidator) {
 
     if (accumulator.isEmpty) Left(voSeq.map(_._1.get))
     else Right(accumulator)
-
-//    val result = process.scan(Seq[T]() -> Seq[LineConstraintViolation]()) { (r, e) =>
-//      val (s, f) = r
-//      val validationResult = validator.validate(e)
-//      if (validationResult.hasError) s -> (f :+ validationResult)
-//      else (s :+ e._1.get) -> f
-//    }.takeWhile()
-//      .dropWhile{case (succ, fail) => fail.size < buffer}
-//      .take(1)
-//
-//    val run = result.runLast.run.get
-//    if (run._2.isEmpty) Left(run._1)
-//    else Right(run._2)
 
   }
 
