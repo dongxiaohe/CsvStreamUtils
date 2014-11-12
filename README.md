@@ -1,6 +1,6 @@
 CsvStreamUtils
 ==============
-CsvStreamUtils is a CSV toolkit written in Scala to provide a functional way to handle CSV file or stream. It can be imported in Java or Scala. In order to get rid of the boilerplate to parse CSV file in a imperative way, it allows users to use more composable way to handle CSV parsing. 
+CsvStreamUtils is a CSV toolkit written in Scala to provide a functional way to handle CSV files or streams. It can be imported in Java or Scala. In order to get rid of the boilerplate to parse CSV file in a imperative way, it allows users to use more composable way to handle CSV parsing. 
 
 ### Using CsvStreamUtils (You can use it in Java as well)
 
@@ -18,27 +18,28 @@ There are several features that can be used for the CSV parsing
 
 ### The issue: The imperative way of handling CSV IO
 
-    List<ViewObject> voList = Lists.newArrayList();
-    try (CSVReader csvReader = csvFactory.createReader(csv)) {
-      String[] csvColumns;
-      int count = 0;
-      csvColumns = csvReader.readNext();
+```java
+List<ViewObject> voList = Lists.newArrayList();
+try (CSVReader csvReader = csvFactory.createReader(csv)) {
+    String[] csvColumns;
+    int count = 0;
+    csvColumns = csvReader.readNext();
   
-      validateHeader(csvColumns, headers);
+    validateHeader(csvColumns, headers);
   
-      csvPersistentStrategy.validationContext();
-      //you want to have error limit not return all the errors
-      while (errors.size() <= ERROR_LIMIT 
-          && (csvColumns = csvReader.readNext()) != null) {
-              errors.addAll(csvLineValidator.validateCsvLine(csvColumns,
-                  lineNo, validationContext));   
-          lineNo++;
-          voList.add(factory.create(csvColumns));
-      } catch (IOException ex) {
+    csvPersistentStrategy.validationContext();
+    //you want to have error limit not return all the errors
+    while (errors.size() <= ERROR_LIMIT 
+        && (csvColumns = csvReader.readNext()) != null) {
+            errors.addAll(csvLineValidator.validateCsvLine(csvColumns,
+                lineNo, validationContext));   
+        lineNo++;
+        voList.add(factory.create(csvColumns));
+    } catch (IOException ex) {
         //error handling
-      }
     }
-
+}
+```
 
 
 #### There are several issues related to this implementation. 
@@ -51,12 +52,14 @@ There are several features that can be used for the CSV parsing
 
 #### 1. Transform CSV content to a List<T>
 
-    CsvService service = new CsvService();
-    File file = new File("src/test/resources/users.csv");
-    Result<User> result = service.parse(file, User::new);
-    if (result.isSuccessful()) {
-       List<User> userList = result.getResult();
-    }
+```java
+CsvService service = new CsvService();
+File file = new File("src/test/resources/users.csv");
+Result<User> result = service.parse(file, User::new);
+if (result.isSuccessful()) {
+   List<User> userList = result.getResult();
+}
+```
 
 + `User::new` is Java 8 method reference syntax to the constructor. In this example it acts as a factory for CsvStreamUtils to construct `User` objects from arrays of `String`.
 + For use in Java 7, replace this reference with an instance of ```Function<String[], User>``` from [Guava](https://github.com/google/guava) to transform a `String[]` to a `User`.
@@ -64,12 +67,14 @@ There are several features that can be used for the CSV parsing
 
 #### 2. Error handling
 
-    File file = new File("src/test/resources/users_invalid_1_rows.csv");
-    Result<User> result = service.parse(file, User::new);
-    assertThat(result.isFailed(), is(true));
-    List<LineErrorConverter> failureResult = result.getFailureResult();
-    assertThat(failureResult.size(), is(1));
-    List<SimplifiedErrorContainer> errorContainer = failureResult.get(0).getViolations()
+```java
+File file = new File("src/test/resources/users_invalid_1_rows.csv");
+Result<User> result = service.parse(file, User::new);
+assertThat(result.isFailed(), is(true));
+List<LineErrorConverter> failureResult = result.getFailureResult();
+assertThat(failureResult.size(), is(1));
+List<SimplifiedErrorContainer> errorContainer = failureResult.get(0).getViolations()
+```
 
 The `SimplifiedErrorContainer` has 3 fields to specify errors:
 
@@ -92,92 +97,106 @@ Given the CSV file:
 
 And the `User` class:
 
-    public class User {
-        @NotEmpty
-        private String name;
-        @NotEmpty
-        private String company;
-        @NotEmpty
-        private String interest;
-        @NotEmpty
-        private String team;
-      ...
-    }
+```java
+public class User {
+    @NotEmpty
+    private String name;
+    @NotEmpty
+    private String company;
+    @NotEmpty
+    private String interest;
+    @NotEmpty
+    private String team;
+    // ...
+}
+```
     
 We can parse the file like so:
 
-    File file = new File("src/test/resources/users_invalid_3_rows.csv");
-    Result<User> result = service.parse(file, User::new);
+```java
+File file = new File("src/test/resources/users_invalid_3_rows.csv");
+Result<User> result = service.parse(file, User::new);
+```
     
 And extract all errors:
 
-    List<LineErrorConverter> failureResult = result.getFailureResult();
-    String formattedErrorMessage = result.getFormattedErrorMessage();
+```java
+List<LineErrorConverter> failureResult = result.getFailureResult();
+String formattedErrorMessage = result.getFormattedErrorMessage();
 
-    System.out.println(formattedErrorMessage)
+System.out.println(formattedErrorMessage)
 
-    //Line 3 Column Interest may not be empty.
-    //Line 3 Column Team may not be empty.
-    //Line 4 Column Interest may not be empty.
-    //Line 5 Column Team may not be empty.
-
+//Line 3 Column Interest may not be empty.
+//Line 3 Column Team may not be empty.
+//Line 4 Column Interest may not be empty.
+//Line 5 Column Team may not be empty.
+```
 
 
 #### 4. Operations for row parsing
 
 Dropping rows:
 
-    // the first 3 rows are part of the header
-    StreamOperationBuilder<User> builder = new StreamOperationBuilder<>();
-    Result<User> result = service.parse(file, User::new, 
-        builder.drop(3)
-    );
+```java
+// the first 3 rows are part of the header
+StreamOperationBuilder<User> builder = new StreamOperationBuilder<>();
+Result<User> result = service.parse(file, User::new, 
+    builder.drop(3)
+);
+```
 
 Limiting rows parsed:
 
-    // the info is in the first line
-    builder.take(1);
+```java
+// the info is in the first line
+builder.take(1);
+```
     
 Parsing rows whilst a predicate holds true:
 
-    // we don't want to know about James
-    builder.takeWhile(user -> !"James".equals(user.getName));
+```java
+// we don't want to know about James
+builder.takeWhile(user -> !"James".equals(user.getName));
+```
     
 And finally, Composing operations to target specific rows:
 
-    // the info is on line 3
-    builder.drop(3).andThen(builder.takeWhile(t -> !"James".equals(t.getName))));
-
+```java
+// the info is on line 3
+builder.drop(3).andThen(builder.takeWhile(t -> !"James".equals(t.getName))));
+```
 
 
 #### 5. Customisation of errors
 
 Limiting the number of errors:
 
-    File file = new File("src/test/resources/users_invalid_100_rows.csv");
-    Result<User> result = service.parse(file, User::new, 5); // Only return maximum 5 lines of error
-    List<LineErrorConverter> failureResult = result.getFailureResult();
-    assertThat(failureResult.size(), is(5)); //only return 5 lines error
+```java
+File file = new File("src/test/resources/users_invalid_100_rows.csv");
+Result<User> result = service.parse(file, User::new, 5); // Only return maximum 5 lines of error
+List<LineErrorConverter> failureResult = result.getFailureResult();
+assertThat(failureResult.size(), is(5)); //only return 5 lines error
+```
 
 Customise the format of error messages
 
-    //to implement ErrorLineFormatter
-    public class CustomizedErrorLineFormatter implements ErrorLineFormatter {
-        @Override
-        public String format(int lineNumber, String columnName, String errorMessage) {
-            return "Column " + columnName + " in Line " + lineNumber + " has error: " + errorMessage;
-        }
+```java
+//to implement ErrorLineFormatter
+public class CustomizedErrorLineFormatter implements ErrorLineFormatter {
+    @Override
+    public String format(int lineNumber, String columnName, String errorMessage) {
+        return "Column " + columnName + " in Line " + lineNumber + " has error: " + errorMessage;
     }
+}
 
+// usage
+String customizedErrorMessage = result.getFormattedErrorMessage(new CustomizedErrorLineFormatter());
 
-    // usage
-    String customizedErrorMessage = result.getFormattedErrorMessage(new CustomizedErrorLineFormatter());
+System.out.println(customizedErrorMessage);
 
-    System.out.println(customizedErrorMessage);
-
-    //Column Interest in Line 3 has error: may not be empty
-    //Column Team in Line 3 has error: may not be empty
-    //Column Interest in Line 4 has error: may not be empty
-    //Column Team in Line 5 has error: may not be empty
-
+//Column Interest in Line 3 has error: may not be empty
+//Column Team in Line 3 has error: may not be empty
+//Column Interest in Line 4 has error: may not be empty
+//Column Team in Line 5 has error: may not be empty
+```
 
